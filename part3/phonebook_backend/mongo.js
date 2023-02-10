@@ -1,31 +1,43 @@
-import { set, connect, Schema, model, connection } from 'mongoose'
+const mongoose = require('mongoose')
 
-if (process.argv.length<3) {
-  console.log('give password as argument')
-  process.exit(1)
+if (process.argv.length < 3) {
+    console.log('give password as argument')
+    process.exit(1)
 }
 
 const password = process.argv[2]
 
 const url =
-  `mongodb+srv://fullstack:${password}>@cluster0.mggevaw.mongodb.net/persons?retryWrites=true&w=majority`
+    `mongodb+srv://fullstack:${password}>@cluster0.mggevaw.mongodb.net/people?retryWrites=true&w=majority`
 
-set('strictQuery',false)
-connect(url)
+mongoose.set('strictQuery', false)
+mongoose.connect(url)
 
-const noteSchema = new Schema({
-  content: String,
-  important: Boolean,
+
+const personSchema = new mongoose.Schema({
+    id: Number,
+    name: String,
+    number: String
 })
 
-const Note = model('Note', noteSchema)
+const Person = mongoose.model('Person', personSchema)
 
-const note = new Note({
-  content: 'HTML is Easy',
-  important: true,
+Person
+    .find({})
+    .then(persons => {
+        result.forEach(note => {
+            console.log(note)
+        })
+        mongoose.connection.close()
+    })
+
+const person = new Person({
+    "id": 5,
+    "name": "test",
+    "number": "123"
 })
 
-note.save().then(result => {
-  console.log('note saved!')
-  connection.close()
+person.save().then(result => {
+    console.log('person saved!')
+    mongoose.connection.close()
 })
