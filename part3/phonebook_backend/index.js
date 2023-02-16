@@ -15,11 +15,15 @@ app.get("/", (request, response) => {
 });
 
 app.get("/info", (request, response) => {
-    response.send(
-        `<div>Phonebook has info for ${persons.length} people</div>
-        <div>${new Date()}</div>
-        `
-    );
+    Person
+        .find({})
+        .then(persons => {
+            response.send(
+                `<div>Phonebook has info for ${persons.length} people</div>
+                <div>${new Date()}</div>
+                `
+            );
+        })
 });
 
 app.get("/api/persons", (request, response) => {
@@ -51,19 +55,12 @@ app.post('/api/persons', (request, response) => {
         })
     }
 
-    if (persons.some(person => person.name === body.name)) {
-        return response.status(400).json({
-            error: 'name must be unique'
-        })
-    }
-
     const person = new Person({
         name: body.name,
         number: body.number,
         id: generateId(),
     })
 
-    //persons = persons.concat(person)
     person.save().then(savedPerson => {
         response.json(savedPerson)
     })
@@ -90,13 +87,6 @@ app.delete('/api/persons/:id', (request, response, next) => {
         .then(result => response.status(204).end())
         .catch(error => next(error))
 })
-
-const generateId = () => {
-    const maxId = persons.length > 0
-        ? Math.max(...persons.map(n => n.id))
-        : 0
-    return maxId + 1
-}
 
 const unknownEndpoint = (request, response) => {
     response.status(404).send({ error: 'unknown endpoint' })
