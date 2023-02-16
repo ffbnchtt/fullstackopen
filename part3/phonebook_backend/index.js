@@ -31,8 +31,6 @@ const personSchema = new mongoose.Schema({
     number: String
 })
 
-const Person = mongoose.model('Person', personSchema)
-
 let persons = [
     {
         "id": 1,
@@ -77,22 +75,15 @@ app.get("/api/persons", (request, response) => {
 });
 //mongoose.connection.close()
 
-/*app.get('/api/notes/:id', (request, response) => {
-    Note.findById(request.params.id).then(note => {
-      response.json(note)
-    })
-  })*/
-
 app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    const person = persons.find(person => person.id === id)
-
-    if (person) {
-        response.json(person)
-    } else {
-        response.status(404).end()
-    }
-    response.json(person)
+    Person.findById(request.params.id)
+        .then(person => {
+            if (person) {
+                response.json(person)
+            } else {
+                response.status(404).end()
+            }
+        })
 })
 
 app.post('/api/persons', (request, response) => {
