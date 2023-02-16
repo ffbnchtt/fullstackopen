@@ -58,7 +58,7 @@ app.post('/api/persons', (request, response) => {
     const person = new Person({
         name: body.name,
         number: body.number,
-        id: generateId(),
+        id: body.id,
     })
 
     person.save().then(savedPerson => {
@@ -72,7 +72,6 @@ app.put('/api/persons/:id', (request, response, next) => {
     const person = {
         name: body.name,
         number: body.number,
-        id: generateId(),
     }
 
     person.findByIdAndUpdate(request.params.id, person, { new: true })
