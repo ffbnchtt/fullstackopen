@@ -52,7 +52,7 @@ const App = () => {
       })
       .catch((error) => {
         console.error(error);
-        setMessage({ content: "Error", type: "error", show: true });
+        setMessage({ content: error.response.data.error, type: "error", show: true });
         setTimeout(() => {
           setMessage({ ...message, show: false });
         }, 5000);
@@ -86,7 +86,7 @@ const App = () => {
           console.error(error);
           setMessage({
             ...message,
-            content: `Error`,
+            content: error.response.data.error,
             type: "error",
             show: true,
           });
@@ -120,7 +120,7 @@ const App = () => {
           console.error(error);
           setMessage({
             ...message,
-            content: `Error`,
+            content: error.response.data.error,
             type: "error",
             show: true,
           });
